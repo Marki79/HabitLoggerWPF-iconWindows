@@ -1,0 +1,47 @@
+<Window x:Class="HabitLoggerWPF.DetalleHabitoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Detalle del hábito" Height="300" Width="380"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        PreviewKeyDown="Window_PreviewKeyDown">
+
+    <!-- Cada {Binding X} lee la propiedad X de ese Habito -->
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />   <!-- Título -->
+            <RowDefinition Height="Auto" />   <!-- Id -->
+            <RowDefinition Height="Auto" />   <!-- Nombre -->
+            <RowDefinition Height="Auto" />   <!-- Cantidad -->
+            <RowDefinition Height="Auto" />   <!-- Fecha -->
+            <RowDefinition Height="*" />      <!-- Espacio libre -->
+            <RowDefinition Height="Auto" />   <!-- Aviso + botón -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Nombre}"
+                   FontSize="22" FontWeight="Bold"
+                   Foreground="{StaticResource ColorAcento}"
+                   Margin="0,0,0,16" TextWrapping="Wrap" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Id:" FontWeight="SemiBold" Margin="0,4,16,4" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Id}" Margin="0,4" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Nombre:" FontWeight="SemiBold" Margin="0,4,16,4" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Nombre}" Margin="0,4" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Cantidad:" FontWeight="SemiBold" Margin="0,4,16,4" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Cantidad}" Margin="0,4" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Fecha:" FontWeight="SemiBold" Margin="0,4,16,4" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Fecha}" Margin="0,4" />
+
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2">
+            <TextBlock Text="Pulsa ESC para volver" Foreground="Gray" Margin="0,0,0,8" />
+            <Button Content="Cerrar" HorizontalAlignment="Right" Margin="0" Click="BtnCerrar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

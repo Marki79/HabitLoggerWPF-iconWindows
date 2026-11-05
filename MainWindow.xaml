@@ -1,0 +1,103 @@
+<Window x:Class="HabitLoggerWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Habit Logger" Height="560" Width="780"
+        MinHeight="440" MinWidth="640"
+        Loaded="Window_Loaded" Closed="Window_Closed"
+        PreviewKeyDown="Window_PreviewKeyDown">
+
+    <!-- DockPanel: menú arriba, barra de estado abajo y el resto en el centro -->
+    <DockPanel>
+
+        <!-- Menú superior -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Archivo">
+                <MenuItem Header="Recargar datos" Click="BtnRecargar_Click" />
+                <MenuItem Header="Insertar datos de _ejemplo" Click="MenuEjemplo_Click" />
+                <Separator />
+                <MenuItem Header="Salir" Click="MenuSalir_Click" />
+            </MenuItem>
+        </Menu>
+
+        <!--Barra de estado inferior: se rellena desde C# -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="txtEstado" Text="Listo" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <!-- Contenido principal: 4 filas -->
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />   <!-- Formulario -->
+                <RowDefinition Height="Auto" />   <!-- Buscador -->
+                <RowDefinition Height="*" />      <!-- Tabla (ocupa el espacio que sobra) -->
+                <RowDefinition Height="Auto" />   <!-- Botones -->
+            </Grid.RowDefinitions>
+
+            <!-- Fila 0: formulario para registrar un hábito nuevo -->
+            <GroupBox Grid.Row="0" Header="Registrar nuevo hábito" Padding="8">
+                <WrapPanel>
+                    <StackPanel Margin="0,0,16,0">
+                        <Label Content="Nombre:" Target="{Binding ElementName=txtNombre}" />
+                        <TextBox x:Name="txtNombre" Width="200" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,0">
+                        <Label Content="Cantidad:" Target="{Binding ElementName=txtCantidad}" />
+                        <TextBox x:Name="txtCantidad" Width="80" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,0">
+                        <Label Content="Fecha:" Target="{Binding ElementName=dpFecha}" />
+                        <DatePicker x:Name="dpFecha" Width="140" />
+                    </StackPanel>
+
+                    <Button Content="Añadir" Style="{StaticResource Primario}"
+                            VerticalAlignment="Bottom" Click="BtnAnadir_Click" />
+                </WrapPanel>
+            </GroupBox>
+
+            <!-- Fila 1: buscador. TextChanged filtra la tabla mientras se escribe -->
+            <Grid Grid.Row="1" Margin="0,16,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Buscar:" Target="{Binding ElementName=txtBuscar}" />
+                <TextBox Grid.Column="1" x:Name="txtBuscar"
+                         ToolTip="Escribe parte del nombre para filtrar"
+                         TextChanged="TxtBuscar_TextChanged" />
+            </Grid>
+
+            <!-- Fila 2: tabla con los datos leídos de la base de datos -->
+            <DataGrid Grid.Row="2" x:Name="dgHabitos"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionChanged="DgHabitos_SelectionChanged">
+                <!-- Estilo de las filas: EventSetter engancha un evento de clic a CADA fila -->
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                        <EventSetter Event="PreviewMouseLeftButtonUp" Handler="FilaHabito_Click" />
+                    </Style>
+                </DataGrid.RowStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="*" />
+                    <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="100" />
+                    <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" Width="120" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Fila 3: botones inferiores -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,16,0,0">
+                <Button x:Name="btnEliminar" Content="Eliminar seleccionado"
+                        IsEnabled="False" Click="BtnEliminar_Click" />
+                <Button Content="Recargar" Click="BtnRecargar_Click" />
+            </StackPanel>
+        </Grid>
+
+    </DockPanel>
+</Window>
